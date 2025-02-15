@@ -26,6 +26,7 @@ public class AbridorJanela {
             stage.setTitle(titulo);
             stage.setWidth(width);
             stage.setHeight(height);
+            stage.setResizable(true);
             stage.setScene(new Scene(loader.getRoot()));
             stage.show();
         } catch (Exception e) {

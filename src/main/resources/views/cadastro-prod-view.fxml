@@ -3,6 +3,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.CadastroProdutosController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<VBox spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.CadastroProdutosController">
+
     <Label text="Tela de Produtos" style="-fx-font-size: 18px;"/>
+    <Button text=" Cadastrar Produto" />
+    <TableView fx:id="tView_Prod">
+        <columns>
+            <TableColumn text="ID" fx:id="prodIdCol" />
+            <TableColumn text="Quant" fx:id="prodQuantCol" />
+            <TableColumn text="Descrição" fx:id="prodDescCol" />
+            <TableColumn text="Preço" fx:id="prodPrecoCol" />
+            <TableColumn text="Codigo Barras"  fx:id="prodCbCol" />
+            <TableColumn text="NF" fx:id="prodNfCol" />
+        </columns>
+    </TableView>
+
 </VBox>

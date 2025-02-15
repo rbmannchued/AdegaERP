@@ -15,7 +15,7 @@ public class TelaInicial {
     }
 
     public void abrir(){
-        abridorJanela.abrirNovaJanela("/views/tela-inicial-view.fxml", "Tela Inicial", 700, 500);
+        abridorJanela.abrirNovaJanela("/views/tela-inicial-view.fxml", "Tela Inicial", 800, 600);
     }
 
     public FXMLLoader getXMLLoader(){
