@@ -17,7 +17,7 @@
             </padding>
 
             <Label text="Menu" style="-fx-font-size: 20px;" minWidth="200"/>
-
+            <Button text="Início" onAction="#onInicioButtonClick" minWidth="200"/>
             <Button text="Produtos" onAction="#onCadastroProdButtonClick" minWidth="200"/>
             <Button text="Vendas" onAction="#onVendasButtonClick" minWidth="200"/>
             <Button text="Clientes" onAction="#onClientesButtonClick" minWidth="200"/>

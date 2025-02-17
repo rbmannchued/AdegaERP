@@ -2,14 +2,17 @@ package org.example.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import org.example.util.SpringFXMLLoader;
 import org.springframework.stereotype.Controller;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 @Controller
-public class TelaInicialController {
+public class TelaInicialController implements Initializable {
 
     @FXML
     private BorderPane conteudoPane;
@@ -51,5 +54,14 @@ public class TelaInicialController {
     @FXML
     public void onRelatoriosButtonClick(ActionEvent actionEvent) {
         carregarTela("relatorios-view.fxml");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        carregarTela("main-view.fxml");
+    }
+
+    public void onInicioButtonClick(ActionEvent actionEvent) {
+        carregarTela("main-view.fxml");
     }
 }
