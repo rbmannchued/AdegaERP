@@ -35,7 +35,7 @@ public class TelaInicialController {
 
     @FXML
     public void onCadastroProdButtonClick(ActionEvent actionEvent) {
-        carregarTela("cadastro-prod-view.fxml");
+        carregarTela("produtos-view.fxml");
     }
 
     @FXML

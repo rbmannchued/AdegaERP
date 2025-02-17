@@ -25,4 +25,16 @@ public class BebidaService {
     public List<Bebida> buscarTodos() {
         return (List<Bebida>) bebidaRepository.findAll();
     }
+    @Transactional
+    public Bebida inserirBebida(String descricao, float quantidade, float preco, String codigoBarras, boolean nf) {
+        Bebida bebida = new Bebida();
+        bebida.setDescricao(descricao);
+        bebida.setQuantidade(quantidade);
+        bebida.setPreco(preco);
+        bebida.setCodigo_barras(codigoBarras);
+        bebida.setNf(nf);
+
+        return bebidaRepository.save(bebida); // Retorna o objeto salvo no banco
+    }
+
 }

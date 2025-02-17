@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane  xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.AddProdController" >
+
+    <VBox spacing="15">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+        <Label text="Adicionar Produto" style="-fx-font-size: 15px; -fx-font-weight: bold;" minWidth="350"/>
+        <VBox>
+            <Label text="Código de Barras:" minWidth="200"/>
+            <TextField fx:id="tf_CodigoBarra" minWidth="200"/>
+        </VBox>
+        <VBox>
+            <Label text="Descrição:" minWidth="200"/>
+            <TextField fx:id="tf_Desc" minWidth="200"/>
+        </VBox>
+        <VBox>
+            <Label text="Quantidade:" minWidth="200"/>
+            <TextField fx:id="tf_Quant" minWidth="200"/>
+        </VBox>
+
+        <VBox>
+            <Label text="Preço:" minWidth="200"/>
+            <TextField fx:id="tf_Preco" minWidth="200"/>
+        </VBox>
+        <Button text="Salvar" onAction="#onSalvarButtonClick" minWidth="100"/>
+
+
+    </VBox>
+
+
+</BorderPane>

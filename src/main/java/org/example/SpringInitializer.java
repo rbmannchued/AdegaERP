@@ -20,7 +20,7 @@ public class SpringInitializer extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         AbridorJanela abridorJanela = applicationContext.getBean(AbridorJanela.class);
-        abridorJanela.abrirNovaJanela("/views/tela-inicial-view.fxml", "Tela inicial", 1200, 700);
+        abridorJanela.abrirNovaJanela("/views/tela-inicial-view.fxml", "Tela inicial", 1200, 800);
     }
 
     @Override

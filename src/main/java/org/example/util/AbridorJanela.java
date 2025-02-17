@@ -18,7 +18,7 @@ public class AbridorJanela {
         this.fxmlLoader = fxmlLoader;
     }
 
-    public void abrirNovaJanela(String fxmlPath, String titulo, double width, double height) {
+    public Stage abrirNovaJanela(String fxmlPath, String titulo, double width, double height) {
         try {
             loader = fxmlLoader.load(fxmlPath);
             Stage stage = new Stage();
@@ -29,8 +29,11 @@ public class AbridorJanela {
             stage.setResizable(true);
             stage.setScene(new Scene(loader.getRoot()));
             stage.show();
+
+            return stage; // Retorna a Stage para que quem chamar possa manipular
         } catch (Exception e) {
             System.out.println("Erro ao abrir janela: " + e.getMessage());
+            return null; // Retorna null caso ocorra um erro
         }
     }
 
