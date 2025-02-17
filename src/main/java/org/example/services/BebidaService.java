@@ -36,5 +36,10 @@ public class BebidaService {
 
         return bebidaRepository.save(bebida); // Retorna o objeto salvo no banco
     }
+    @Transactional
+    public List<Bebida> buscarPorDescricao(String descricao) {
+        return bebidaRepository.findByDescricaoContainingIgnoreCase(descricao);
+    }
+
 
 }

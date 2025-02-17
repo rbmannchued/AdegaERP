@@ -14,7 +14,10 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <Label text="Tela de Produtos" style="-fx-font-size: 18px;"/>
-    <TextField text="Pesquisa"/>
+    <HBox spacing="10">
+        <TextField promptText="Pesquisar por produto" fx:id="tf_Pesquisa" prefWidth="800"/>
+        <Button text="Buscar" onAction="#onBuscarButtonClick"/>
+    </HBox>
     <TableView fx:id="tView_Prod">
         <columns>
             <TableColumn text="ID" fx:id="prodIdCol" />

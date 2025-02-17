@@ -6,8 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.entities.Bebida;
 import org.example.services.BebidaService;
@@ -46,6 +48,11 @@ public class ProdutosController implements Initializable {
     @FXML
     private TableColumn<Bebida, Boolean> prodNfCol;
 
+    @FXML
+    private TextField tf_Pesquisa;
+
+
+
     @Autowired
     private AbridorJanela abridorJanela;
 
@@ -78,6 +85,12 @@ public class ProdutosController implements Initializable {
 
         // Associa os dados à TableView
         tView_Prod.setItems(bebidasObservable);
+        //pesquisar automaticamente ao digitar
+        tf_Pesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
+            onBuscarButtonClick(null);
+        });
+
+        atualizarTabela();
     }
 
     public void onAddProdClickButton(ActionEvent actionEvent) {
@@ -94,5 +107,21 @@ public class ProdutosController implements Initializable {
 
         // Atualiza os dados na TableView
         tView_Prod.setItems(FXCollections.observableArrayList(bebidasAtualizadas));
+    }
+    @FXML
+    public void onBuscarButtonClick(ActionEvent actionEvent) {
+
+        String descricao = tf_Pesquisa.getText().trim(); // Obtém o texto digitado
+
+        if (!descricao.isEmpty()) {
+            // Busca as bebidas com base na descrição
+            List<Bebida> bebidasEncontradas = bebidaService.buscarPorDescricao(descricao);
+
+            // Atualiza a TableView com os resultados da busca
+            tView_Prod.setItems(FXCollections.observableArrayList(bebidasEncontradas));
+        } else {
+            // Se o campo estiver vazio, recarrega todos os dados
+            atualizarTabela();
+        }
     }
 }
