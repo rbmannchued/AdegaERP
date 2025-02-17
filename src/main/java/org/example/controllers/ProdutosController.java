@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.entities.Bebida;
 import org.example.services.BebidaService;
@@ -22,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller // Indica que esta classe é um controlador gerenciado pelo Spring
@@ -122,6 +120,30 @@ public class ProdutosController implements Initializable {
         } else {
             // Se o campo estiver vazio, recarrega todos os dados
             atualizarTabela();
+        }
+    }
+
+    public void onDeletarClickButton(ActionEvent actionEvent) {
+        Bebida bebidaSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
+
+        if (bebidaSelecionada != null) {
+            // Confirmação antes de deletar
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmação de Exclusão");
+            alert.setHeaderText("Você tem certeza que deseja deletar este produto?");
+            alert.setContentText("Descrição: " + bebidaSelecionada.getDescricao());
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Deleta o produto
+                bebidaService.deletarBebida(bebidaSelecionada.getId());
+                atualizarTabela(); // Atualiza a TableView após a exclusão
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Nenhum Produto Selecionado");
+            alert.setHeaderText("Por favor, selecione um produto para deletar.");
+            alert.showAndWait();
         }
     }
 }

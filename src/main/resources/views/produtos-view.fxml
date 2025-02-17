@@ -9,6 +9,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Separator?>
 <VBox spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.ProdutosController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -28,7 +29,10 @@
             <TableColumn text="NF" fx:id="prodNfCol" />
         </columns>
     </TableView>
-    <HBox alignment="BOTTOM_LEFT">
+    <HBox spacing="20" alignment="BOTTOM_LEFT">
+        <Button text="Alterar"/>
+        <Button text="Deletar" onAction="#onDeletarClickButton"/>
+        <Separator/>
         <Button text="Cadastrar Produto" onAction="#onAddProdClickButton"/>
     </HBox>
 

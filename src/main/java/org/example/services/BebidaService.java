@@ -40,6 +40,10 @@ public class BebidaService {
     public List<Bebida> buscarPorDescricao(String descricao) {
         return bebidaRepository.findByDescricaoContainingIgnoreCase(descricao);
     }
+    @Transactional
+    public void deletarBebida(int id) {
+        bebidaRepository.deleteById(id);
+    }
 
 
 }
