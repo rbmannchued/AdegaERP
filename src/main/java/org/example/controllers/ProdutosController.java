@@ -11,9 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.entities.Bebida;
 import org.example.services.BebidaService;
 import org.example.util.AbridorJanela;
-import org.hibernate.resource.beans.container.spi.AbstractCdiBeanContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 import javafx.stage.Stage;
 
@@ -143,6 +141,30 @@ public class ProdutosController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Nenhum Produto Selecionado");
             alert.setHeaderText("Por favor, selecione um produto para deletar.");
+            alert.showAndWait();
+        }
+    }
+
+    public void onAlterarClickButton(ActionEvent actionEvent) {
+        Bebida bebidaSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
+
+        if (bebidaSelecionada != null) {
+            // Abre a janela de edição
+            Stage stage = abridorJanela.abrirNovaJanela("/views/alterar-prod-view.fxml", "Alterar Produtos",800,600);
+
+            // obtem o controlador da janela de edição
+            AlterarProdController controller = (AlterarProdController) abridorJanela.getController();
+
+            // Passa o produto selecionado e o stage para o controlador
+            controller.setBebidaSelecionada(bebidaSelecionada);
+            controller.setStage(stage);
+
+            // Atualiza a tabela após fechar a janela de edição
+            stage.setOnHidden(e -> atualizarTabela());
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Nenhum Produto Selecionado");
+            alert.setHeaderText("Por favor, selecione um produto para editar.");
             alert.showAndWait();
         }
     }

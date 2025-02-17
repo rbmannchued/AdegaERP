@@ -30,7 +30,7 @@
         </columns>
     </TableView>
     <HBox spacing="20" alignment="BOTTOM_LEFT">
-        <Button text="Alterar"/>
+        <Button text="Alterar" onAction="#onAlterarClickButton"/>
         <Button text="Deletar" onAction="#onDeletarClickButton"/>
         <Separator/>
         <Button text="Cadastrar Produto" onAction="#onAddProdClickButton"/>

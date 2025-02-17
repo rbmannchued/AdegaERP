@@ -2,10 +2,8 @@ package org.example.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
+
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import org.example.util.SpringFXMLLoader;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +24,7 @@ public class AbridorJanela {
             stage.setTitle(titulo);
             stage.setWidth(width);
             stage.setHeight(height);
+           // stage.initModality(Modality.WINDOW_MODAL);
             stage.setResizable(true);
             stage.setScene(new Scene(loader.getRoot()));
             stage.show();
@@ -35,6 +34,9 @@ public class AbridorJanela {
             System.out.println("Erro ao abrir janela: " + e.getMessage());
             return null; // Retorna null caso ocorra um erro
         }
+    }
+    public <T> T getController() {
+        return loader.getController();
     }
 
     public FXMLLoader getFxmlLoader() {
