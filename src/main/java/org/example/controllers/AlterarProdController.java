@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.entities.Bebida;
-import org.example.services.BebidaService;
+import org.example.entities.Produto;
+import org.example.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -20,42 +20,42 @@ public class AlterarProdController implements Initializable {
     private TextField tf_CodigoBarra, tf_Desc, tf_Quant, tf_Preco;
 
     @Autowired
-    private BebidaService bebidaService;
-    private Bebida bebidaSelecionada; // Produto selecionado para edição
+    private ProdutoService produtoService;
+    private Produto produtoSelecionada; // Produto selecionado para edição
     private Stage stage; // Referência ao stage da janela de edição
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
-    public void setBebidaSelecionada(Bebida bebida) {
-        this.bebidaSelecionada = bebida;
+    public void setProdutoSelecionada(Produto produto) {
+        this.produtoSelecionada = produto;
         carregarDados();
     }
     public void setStage(Stage stage) {
         this.stage = stage;
     }
     private void carregarDados() {
-        if (bebidaSelecionada != null) {
-            tf_Desc.setText(bebidaSelecionada.getDescricao());
-            tf_Quant.setText(String.valueOf(bebidaSelecionada.getQuantidade()));
-            tf_Preco.setText(String.valueOf(bebidaSelecionada.getPreco()));
-            tf_CodigoBarra.setText(bebidaSelecionada.getCodigo_barras());
+        if (produtoSelecionada != null) {
+            tf_Desc.setText(produtoSelecionada.getDescricao());
+            tf_Quant.setText(String.valueOf(produtoSelecionada.getQuantidade()));
+            tf_Preco.setText(String.valueOf(produtoSelecionada.getPreco()));
+            tf_CodigoBarra.setText(produtoSelecionada.getCodigo_barras());
 
         }
     }
     @FXML
     public void onSalvarButtonClick(ActionEvent actionEvent) {
-        if (bebidaSelecionada != null) {
+        if (produtoSelecionada != null) {
             // Atualiza os dados do produto
-            bebidaSelecionada.setDescricao(tf_Desc.getText());
-            bebidaSelecionada.setQuantidade(Float.parseFloat(tf_Quant.getText()));
-            bebidaSelecionada.setPreco(Float.parseFloat(tf_Preco.getText()));
-            bebidaSelecionada.setCodigo_barras(tf_CodigoBarra.getText());
+            produtoSelecionada.setDescricao(tf_Desc.getText());
+            produtoSelecionada.setQuantidade(Float.parseFloat(tf_Quant.getText()));
+            produtoSelecionada.setPreco(Float.parseFloat(tf_Preco.getText()));
+            produtoSelecionada.setCodigo_barras(tf_CodigoBarra.getText());
 
 
             // Salva as alterações no banco de dados
-            bebidaService.salvar(bebidaSelecionada);
+            produtoService.salvar(produtoSelecionada);
 
             // Fecha a janela de edição
             stage.close();

@@ -13,9 +13,9 @@ public class Produto_Vendido {
 
     @ManyToOne
     @JoinColumn(
-            name = "bebida_id"
+            name = "produto_id"
     )
-    private Bebida bebida;
+    private Produto produto;
 
     private Float quantidade;
 
@@ -42,13 +42,13 @@ public class Produto_Vendido {
     }
 
     @Generated
-    public Bebida getBebida() {
-        return bebida;
+    public Produto getProduto() {
+        return produto;
     }
 
     @Generated
-    public void setBebida(Bebida bebida) {
-        this.bebida = bebida;
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 
     @Generated
@@ -72,11 +72,11 @@ public class Produto_Vendido {
     }
 
     @Generated
-    public Produto_Vendido(final int id, final Float quantidade, final Float preco_vendido, final Bebida bebida, Venda venda){
+    public Produto_Vendido(final int id, final Float quantidade, final Float preco_vendido, final Produto produto, Venda venda){
         this.id = id;
         this.quantidade = quantidade;
         this.preco_vendido = preco_vendido;
-        this.bebida = bebida;
+        this.produto = produto;
         this.venda = venda;
     }
 

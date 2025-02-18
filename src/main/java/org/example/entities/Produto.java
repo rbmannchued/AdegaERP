@@ -6,7 +6,7 @@ import lombok.Generated;
 import java.util.List;
 
 @Entity
-public class Bebida {
+public class Produto {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -24,7 +24,7 @@ public class Bebida {
     private Boolean nf;
 
     @OneToMany(
-            mappedBy = "bebida"
+            mappedBy = "produto"
     )
     private List<Produto_Vendido> produtosVendidosList;
 
@@ -89,7 +89,7 @@ public class Bebida {
     }
 
     @Generated
-    public Bebida(final int id, final String descricao, final Float quantidade, final Float preco, final String codigo_barras, final Boolean nf, List<Produto_Vendido> produtosVendidosList){
+    public Produto(final int id, final String descricao, final Float quantidade, final Float preco, final String codigo_barras, final Boolean nf, List<Produto_Vendido> produtosVendidosList){
         this.id = id;
         this.descricao = descricao;
         this.quantidade = quantidade;
@@ -99,7 +99,7 @@ public class Bebida {
         this.produtosVendidosList = produtosVendidosList;
     }
 
-    public Bebida() {
+    public Produto() {
 
     }
 
