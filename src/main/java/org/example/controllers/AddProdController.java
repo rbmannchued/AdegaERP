@@ -5,10 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import org.example.entities.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.example.entities.Bebida;
-import org.example.services.BebidaService;
+import org.example.services.ProdutoService;
 import javafx.scene.control.TextField;
 
 
@@ -21,7 +21,7 @@ public class AddProdController implements Initializable {
     private TextField tf_CodigoBarra, tf_Desc, tf_Quant, tf_Preco;
 
     @Autowired
-    private BebidaService bebidaService;
+    private ProdutoService produtoService;
 
     public void onSalvarButtonClick(ActionEvent actionEvent) {
         try {
@@ -32,7 +32,7 @@ public class AddProdController implements Initializable {
             float preco = Float.parseFloat(tf_Preco.getText());
 
             // Chama o metodo para inserir no banco
-            Bebida novaBebida = bebidaService.inserirBebida(descricao, quantidade, preco, codigoBarras, true);
+            Produto novaProduto = produtoService.inserirProduto(descricao, quantidade, preco, codigoBarras, true);
 
             // Limpa os campos após salvar
             tf_CodigoBarra.setText(null);
@@ -40,7 +40,7 @@ public class AddProdController implements Initializable {
             tf_Quant.setText(null);
             tf_Preco.setText(null);
 
-            System.out.println("Produto salvo com sucesso: " + novaBebida);
+            System.out.println("Produto salvo com sucesso: " + novaProduto);
             // Fecha a janela
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.close();

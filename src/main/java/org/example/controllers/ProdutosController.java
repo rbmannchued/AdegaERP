@@ -8,8 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.entities.Bebida;
-import org.example.services.BebidaService;
+import org.example.entities.Produto;
+import org.example.services.ProdutoService;
 import org.example.util.AbridorJanela;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,25 +24,25 @@ import java.util.ResourceBundle;
 public class ProdutosController implements Initializable {
 
     @FXML
-    private TableView<Bebida> tView_Prod;
+    private TableView<Produto> tView_Prod;
 
     @FXML
-    private TableColumn<Bebida, Integer> prodIdCol;
+    private TableColumn<Produto, Integer> prodIdCol;
 
     @FXML
-    private TableColumn<Bebida, String> prodDescCol;
+    private TableColumn<Produto, String> prodDescCol;
 
     @FXML
-    private TableColumn<Bebida, Float> prodQuantCol;
+    private TableColumn<Produto, Float> prodQuantCol;
 
     @FXML
-    private TableColumn<Bebida, Float> prodPrecoCol;
+    private TableColumn<Produto, Float> prodPrecoCol;
 
     @FXML
-    private TableColumn<Bebida, String> prodCbCol;
+    private TableColumn<Produto, String> prodCbCol;
 
     @FXML
-    private TableColumn<Bebida, Boolean> prodNfCol;
+    private TableColumn<Produto, Boolean> prodNfCol;
 
     @FXML
     private TextField tf_Pesquisa;
@@ -53,7 +53,7 @@ public class ProdutosController implements Initializable {
     private AbridorJanela abridorJanela;
 
     @Autowired // Injeção do BebidaService
-    private BebidaService bebidaService;
+    private ProdutoService produtoService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -74,13 +74,13 @@ public class ProdutosController implements Initializable {
             prodPrecoCol.setPrefWidth(totalWidth * 0.15);
         });
         // Recupera os dados do banco de dados usando o serviço
-        List<Bebida> bebidas = bebidaService.buscarTodos();
+        List<Produto> produtos = produtoService.buscarTodos();
 
         // Converte a lista para ObservableList
-        ObservableList<Bebida> bebidasObservable = FXCollections.observableArrayList(bebidas);
+        ObservableList<Produto> produtosObservable = FXCollections.observableArrayList(produtos);
 
         // Associa os dados à TableView
-        tView_Prod.setItems(bebidasObservable);
+        tView_Prod.setItems(produtosObservable);
         //pesquisar automaticamente ao digitar
         tf_Pesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
             onBuscarButtonClick(null);
@@ -99,10 +99,10 @@ public class ProdutosController implements Initializable {
     }
     private void atualizarTabela() {
         // Busca novamente os dados do banco
-        List<Bebida> bebidasAtualizadas = bebidaService.buscarTodos();
+        List<Produto> produtosAtualizadas = produtoService.buscarTodos();
 
         // Atualiza os dados na TableView
-        tView_Prod.setItems(FXCollections.observableArrayList(bebidasAtualizadas));
+        tView_Prod.setItems(FXCollections.observableArrayList(produtosAtualizadas));
     }
     @FXML
     public void onBuscarButtonClick(ActionEvent actionEvent) {
@@ -111,10 +111,10 @@ public class ProdutosController implements Initializable {
 
         if (!descricao.isEmpty()) {
             // Busca as bebidas com base na descrição
-            List<Bebida> bebidasEncontradas = bebidaService.buscarPorDescricao(descricao);
+            List<Produto> produtosEncontradas = produtoService.buscarPorDescricao(descricao);
 
             // Atualiza a TableView com os resultados da busca
-            tView_Prod.setItems(FXCollections.observableArrayList(bebidasEncontradas));
+            tView_Prod.setItems(FXCollections.observableArrayList(produtosEncontradas));
         } else {
             // Se o campo estiver vazio, recarrega todos os dados
             atualizarTabela();
@@ -122,19 +122,19 @@ public class ProdutosController implements Initializable {
     }
 
     public void onDeletarClickButton(ActionEvent actionEvent) {
-        Bebida bebidaSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
+        Produto produtoSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
 
-        if (bebidaSelecionada != null) {
+        if (produtoSelecionada != null) {
             // Confirmação antes de deletar
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmação de Exclusão");
             alert.setHeaderText("Você tem certeza que deseja deletar este produto?");
-            alert.setContentText("Descrição: " + bebidaSelecionada.getDescricao());
+            alert.setContentText("Descrição: " + produtoSelecionada.getDescricao());
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 // Deleta o produto
-                bebidaService.deletarBebida(bebidaSelecionada.getId());
+                produtoService.deletarProduto(produtoSelecionada.getId());
                 atualizarTabela(); // Atualiza a TableView após a exclusão
             }
         } else {
@@ -146,9 +146,9 @@ public class ProdutosController implements Initializable {
     }
 
     public void onAlterarClickButton(ActionEvent actionEvent) {
-        Bebida bebidaSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
+        Produto produtoSelecionada = tView_Prod.getSelectionModel().getSelectedItem();
 
-        if (bebidaSelecionada != null) {
+        if (produtoSelecionada != null) {
             // Abre a janela de edição
             Stage stage = abridorJanela.abrirNovaJanela("/views/alterar-prod-view.fxml", "Alterar Produtos",800,600);
 
@@ -156,7 +156,7 @@ public class ProdutosController implements Initializable {
             AlterarProdController controller = (AlterarProdController) abridorJanela.getController();
 
             // Passa o produto selecionado e o stage para o controlador
-            controller.setBebidaSelecionada(bebidaSelecionada);
+            controller.setProdutoSelecionada(produtoSelecionada);
             controller.setStage(stage);
 
             // Atualiza a tabela após fechar a janela de edição
