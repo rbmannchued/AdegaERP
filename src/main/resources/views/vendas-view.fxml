@@ -2,7 +2,47 @@
 
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.VendasController">
-    <Label text="Tela de Vendas" style="-fx-font-size: 18px;"/>
-</VBox>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.VendasController">
+    <!-- Região à esquerda (VBox com botões) -->
+    <left>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <Button text="Vender" onAction="#onVenderButtonClick" minWidth="100"/>
+            <Separator/>
+            <Button text="Deletar" minWidth="100"/>
+            <Button text="Alterar" minWidth="100"/>
+        </VBox>
+    </left>
+
+    <!-- Região central (TableView e Label) -->
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Tela de Vendas" style="-fx-font-size: 18px;"/>
+            <Label text="Lista de Vendas:"/>
+            <TableView fx:id="tView_Vendas">
+                <columns>
+                    <TableColumn text="ID" fx:id="vendasIdCol" />
+                    <TableColumn text="Valor Final" fx:id="vendasValorFinalCol" />
+                    <TableColumn text="Forma Pag" fx:id="vendasFormaPagCol" />
+                    <TableColumn text="Data" fx:id="vendasDataCol" />
+                    <TableColumn text="Total" fx:id="vendasTotalCol" />
+                </columns>
+            </TableView>
+            <Label text="Produtos Vendidos:"/>
+            <TableView fx:id="tView_ProdVendidos">
+                <columns>
+                    <TableColumn text="Descrição" fx:id="prodVendidosDescCol" />
+                    <TableColumn text="Valor Final" fx:id="prodVendidosQuantCol" />
+                    <TableColumn text="Forma Pag" fx:id="prodVendidosPrecoCol" />
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+</BorderPane>

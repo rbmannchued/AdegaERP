@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.PdvController">
+
+    <center>
+    <VBox spacing="10">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+
+        <Label text="Tela PDV" style="-fx-font-size: 18px;"/>
+        <TextField promptText="Pesquise por nome ou código" fx:id="tf_Pesquisa" />
+        <TableView fx:id="tView_Prod" prefWidth="300">
+            <columns>
+                <TableColumn text="ID" fx:id="prodIdCol" />
+                <TableColumn text="Quant" fx:id="prodQuantCol" />
+                <TableColumn text="Descrição" fx:id="prodDescCol" />
+                <TableColumn text="Preço" fx:id="prodPrecoCol" />
+                <TableColumn text="Codigo Barras"  fx:id="prodCbCol" />
+                <TableColumn text="NF" fx:id="prodNfCol" />
+            </columns>
+        </TableView>
+        <Label text="Produtos Selecionados: "/>
+        <TableView fx:id="tView_ProdSelec" prefWidth="300">
+            <columns>
+                <TableColumn text="ID" fx:id="prodSelecIdCol" />
+                <TableColumn text="Quant" fx:id="prodSelecQuantCol" />
+                <TableColumn text="Descrição" fx:id="prodSelecDescCol" />
+                <TableColumn text="Preço" fx:id="prodSelectPrecoCol" />
+            </columns>
+        </TableView>
+
+    </VBox>
+    </center>
+    <right>
+        <VBox spacing="15">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            </padding>
+            <Label text="Menu lado direito"/>
+            <VBox>
+                <Label text="TOTAL R$:" style="-fx-font-size: 11px;"/>
+                <Label text="100,43" fx:id="lb_Total" style="-fx-font-size: 25px;"/>
+            </VBox>
+
+            <ComboBox fx:id="cb_FormaPag" promptText="Forma Pagamento">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                            <String fx:value=" 00 - Dinheiro"/>
+                            <String fx:value="01 - Crédito"/>
+                            <String fx:value="02 - Débito"/>
+                            <String fx:value="03 - Pix"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <TextField promptText="Valor Recebido"/>
+            <TextField promptText="Desconto"/>
+            <HBox>
+                <Label text="Troco:"/>
+                <Label text="R$ 2,50" style="-fx-font-size: 20px"/>
+
+            </HBox>
+
+
+
+            <Button text="Finalizar" />
+        </VBox>
+
+    </right>
+</BorderPane>
+
