@@ -70,7 +70,7 @@
             <TextField promptText="Desconto"/>
             <HBox>
                 <Label text="Troco:"/>
-                <Label text="R$ 2,50" style="-fx-font-size: 20px"/>
+                <Label text="R$ 2,50" fx:id="lb_Troco" style="-fx-font-size: 20px"/>
 
             </HBox>
 
