@@ -3,18 +3,20 @@ package org.example.controllers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
 import org.example.entities.Produto;
 import org.example.entities.Produto_Vendido;
+import org.example.entities.Venda;
 import org.example.services.ProdutoService;
+import org.example.services.Produto_VendidoService;
+import org.example.services.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -24,6 +26,8 @@ import java.util.ResourceBundle;
 
 @Controller
 public class PdvController implements Initializable {
+    @FXML
+    private TextField tf_Taxa;
     @FXML
     private TableView<Produto> tView_Prod;
 
@@ -46,7 +50,7 @@ public class PdvController implements Initializable {
     private TableColumn<Produto, Boolean> prodNfCol;
 
     @FXML
-    private TextField tf_Pesquisa;
+    private TextField tf_Pesquisa, tf_ValorRecebido, tf_Desconto;
 
     @FXML
     private TableView<Produto_Vendido> tView_ProdSelec;
@@ -61,14 +65,31 @@ public class PdvController implements Initializable {
 
     @FXML
     private Label lb_Total, lb_Troco;
+    @FXML
+    private ComboBox<String> cb_FormaPag;
 
 
     @Autowired // Injeção do BebidaService
     private ProdutoService produtoService;
+    @Autowired
+    private VendaService  vendaService;
+    @Autowired
+    private Produto_VendidoService produtoVendidoService;
 
     private ObservableList<Produto_Vendido> produtosSelecionados = FXCollections.observableArrayList();
+
+    float total = 0.0f;
+    float trocoValor = 0.0f;
+
+    public PdvController(ProdutoService produtoService, VendaService vendaService, Produto_VendidoService produtoVendidoService) {
+        this.produtoService = produtoService;
+        this.vendaService = vendaService;
+        this.produtoVendidoService = produtoVendidoService;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        total = 0.0f;
+        trocoValor = 0.0f;
         // Configuração das colunas
         prodIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         prodDescCol.setCellValueFactory(new PropertyValueFactory<>("descricao"));
@@ -119,6 +140,10 @@ public class PdvController implements Initializable {
             produto.setPreco_vendido(event.getNewValue());
             atualizarTotal();
         });
+        tf_ValorRecebido.textProperty().addListener((observable, oldValue, newValue) -> {
+            atualizarTroco();
+        });
+
         atualizarTotal();
         configurarEventoEnter();
         lb_Total.setText("0.00");
@@ -166,13 +191,10 @@ public class PdvController implements Initializable {
 
         if (produtoSelecionado != null) {
             // Criar uma nova instância do Produto_Vendido
-            Produto_Vendido produtoVendido = new Produto_Vendido(
-                    10, // Deixa o ID como null, pois ainda não foi salvo no banco
-                    1.0f, // Quantidade inicial
-                    produtoSelecionado.getPreco(),
-                    produtoSelecionado,
-                    null // Venda será definida depois
-            );
+            Produto_Vendido produtoVendido = new Produto_Vendido();
+            produtoVendido.setPreco_vendido(produtoSelecionado.getPreco());
+            produtoVendido.setQuantidade(1.0f);
+            produtoVendido.setProduto(produtoSelecionado);
 
             // Adiciona à lista temporária
             produtosSelecionados.add(produtoVendido);
@@ -180,8 +202,8 @@ public class PdvController implements Initializable {
         }
     }
     private void atualizarTotal() {
-        float total = 0.0f;
 
+        total = 0;
         // Percorre todos os produtos selecionados e soma (quantidade * preço)
         for (Produto_Vendido produto : produtosSelecionados) {
             total += produto.getQuantidade() * produto.getPreco_vendido();
@@ -189,7 +211,53 @@ public class PdvController implements Initializable {
 
         // Atualiza a Label com o novo total formatado
         lb_Total.setText(String.format("%.2f", total));
+        atualizarTroco();
+    }
+    private void atualizarTroco(){
+        try{
+            float valorRecebido = Float.parseFloat(tf_ValorRecebido.getText().replace(",", "."));
+            trocoValor = valorRecebido - total;
+            lb_Troco.setText(String.format("%.2f", trocoValor));
+
+        }catch (NumberFormatException e){
+            lb_Troco.setText("0.00");
+        }
+
     }
 
 
+    public void onFinalizarButtonClick(ActionEvent actionEvent) {
+       try {
+           Venda venda = new Venda();
+           venda.setData(new java.util.Date());
+           venda.setTroco(trocoValor);
+           venda.setForma_pagamento(cb_FormaPag.getValue());
+           venda.setEsta_pago(true);
+           venda.setTotal(total);
+           //venda.setValor_final(total); //total - desconto ?
+           vendaService.salvar(venda);
+
+           for (Produto_Vendido produtoVendido : produtosSelecionados) {
+               produtoVendido.setVenda(venda); // Associar venda ao produto vendido
+               produtoVendido.setProduto(produtoVendido.getProduto());
+               produtoVendido.setQuantidade(produtoVendido.getQuantidade());
+               produtoVendido.setPreco_vendido(produtoVendido.getPreco_vendido());
+
+               produtoVendidoService.salvar(produtoVendido);
+
+
+               // Atualizar estoque do produto original
+               Produto produto = produtoVendido.getProduto();
+               produto.setQuantidade(produto.getQuantidade() - produtoVendido.getQuantidade());
+               produtoService.salvar(produto);
+           }
+           System.out.println("Venda finalizada com sucesso!");
+           Stage stage = (Stage) tf_Desconto.getScene().getWindow();
+           stage.close();
+       }catch (NumberFormatException e){
+           System.out.println("Erro ao finalizar venda: " + e.getMessage());
+           e.printStackTrace();
+       }
+
+    }
 }

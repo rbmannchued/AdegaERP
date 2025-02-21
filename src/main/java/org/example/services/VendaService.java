@@ -21,6 +21,9 @@ public class VendaService {
     public List<Venda> buscarTodos() {
         return (List<Venda>) vendaRepository.findAll();
     }
-
+    @Transactional
+    public void salvar(Venda venda) {
+        vendaRepository.save(venda);
+    }
 
 }

@@ -54,8 +54,8 @@ public class VendasController implements Initializable {
         // Configuração das colunas
         vendasIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         vendasValorFinalCol.setCellValueFactory(new PropertyValueFactory<>("valor_final"));
-        vendasFormaPagCol.setCellValueFactory(new PropertyValueFactory<>("forma_pag"));
-        vendasDataCol.setCellValueFactory(new PropertyValueFactory<>("data_hora"));
+        vendasFormaPagCol.setCellValueFactory(new PropertyValueFactory<>("forma_pagamento"));
+        vendasDataCol.setCellValueFactory(new PropertyValueFactory<>("data"));
         vendasTotalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
 
 

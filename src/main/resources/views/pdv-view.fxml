@@ -56,27 +56,28 @@
                 <Label text="100,43" fx:id="lb_Total" style="-fx-font-size: 25px;"/>
             </VBox>
 
-            <ComboBox fx:id="cb_FormaPag" promptText="Forma Pagamento">
+            <ComboBox fx:id="cb_FormaPag" value="00 - Dinheiro" promptText="Forma Pagamento">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                            <String fx:value=" 00 - Dinheiro"/>
+                            <String fx:value="00 - Dinheiro"/>
                             <String fx:value="01 - Crédito"/>
                             <String fx:value="02 - Débito"/>
                             <String fx:value="03 - Pix"/>
                     </FXCollections>
                 </items>
             </ComboBox>
-            <TextField promptText="Valor Recebido"/>
-            <TextField promptText="Desconto"/>
+            <TextField promptText="Valor Recebido" fx:id="tf_ValorRecebido"/>
+            <TextField promptText="Desconto" fx:id="tf_Desconto"/>
+            <TextField promptText="Taxa %" fx:id="tf_Taxa"/>
             <HBox>
                 <Label text="Troco:"/>
-                <Label text="R$ 2,50" fx:id="lb_Troco" style="-fx-font-size: 20px"/>
+                <Label text="R$ 0,00" fx:id="lb_Troco" style="-fx-font-size: 20px"/>
 
             </HBox>
 
 
 
-            <Button text="Finalizar" />
+            <Button text="Finalizar" onAction="#onFinalizarButtonClick" />
         </VBox>
 
     </right>
