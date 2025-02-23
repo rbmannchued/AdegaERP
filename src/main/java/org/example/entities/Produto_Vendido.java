@@ -89,4 +89,5 @@ public class Produto_Vendido {
     public void setVenda(Venda venda) {
         this.venda = venda;
     }
+
 }
