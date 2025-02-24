@@ -26,4 +26,9 @@ public class VendaService {
         vendaRepository.save(venda);
     }
 
+    @Transactional
+    public List<Object[]> contarVendasPorMes(int ano) {
+        return vendaRepository.contarVendasPorMes(ano);
+    }
+
 }

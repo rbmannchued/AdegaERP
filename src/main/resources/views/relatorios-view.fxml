@@ -3,6 +3,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.RelatoriosController">
     <Label text="Tela de Relatorios" style="-fx-font-size: 18px;"/>
+    <Label text="Vendas no Ano"/>
+    <BarChart fx:id="graficoVendas" prefWidth="600" prefHeight="400">
+        <xAxis>
+            <CategoryAxis label="Mês"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Número de Vendas"/>
+        </yAxis>
+    </BarChart>
 </VBox>
