@@ -38,8 +38,8 @@
             <TableView fx:id="tView_ProdVendidos">
                 <columns>
                     <TableColumn text="Descrição" fx:id="prodVendidosDescCol" />
-                    <TableColumn text="Valor Final" fx:id="prodVendidosQuantCol" />
-                    <TableColumn text="Forma Pag" fx:id="prodVendidosPrecoCol" />
+                    <TableColumn text="Quantidade" fx:id="prodVendidosQuantCol" />
+                    <TableColumn text="Preço Vendido" fx:id="prodVendidosPrecoCol" />
                 </columns>
             </TableView>
 

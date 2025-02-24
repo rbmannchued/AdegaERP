@@ -7,6 +7,8 @@ import org.example.repositories.Produtos_VendidosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class Produto_VendidoService {
     Produtos_VendidosRepository produtos_VendidosRepository;
@@ -21,5 +23,9 @@ public class Produto_VendidoService {
         produtos_VendidosRepository.save(produtoVendido);
     }
 
+    @Transactional
+    public List<Produto_Vendido> findProdutosVendidosByVendaId(Integer vendaId) {
+        return produtos_VendidosRepository.findByVendaId(vendaId);
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import org.example.entities.Produto;
 import org.example.entities.Produto_Vendido;
 import org.example.entities.Venda;
+import org.example.services.Produto_VendidoService;
 import org.example.services.VendaService;
 import org.example.util.AbridorJanela;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class VendasController implements Initializable {
     @FXML
     private TableView<Venda> tView_Vendas;
     @FXML
-    private TableView<Produto_Vendido> tView_ProdutosVendidos;
+    private TableView<Produto_Vendido> tView_ProdVendidos;
     @FXML
     private TableColumn<Venda, Integer> vendasIdCol;
     @FXML
@@ -44,20 +46,36 @@ public class VendasController implements Initializable {
     @FXML
     private TableColumn<Venda, Float> vendasTotalCol;
 
+    @FXML
+    private TableColumn<Produto_Vendido, String> prodVendidosDescCol;
+    @FXML
+    private TableColumn<Produto_Vendido, Float> prodVendidosQuantCol;
+    @FXML
+    private TableColumn<Produto_Vendido, Float> prodVendidosPrecoCol;
+
     @Autowired
     private VendaService vendaService;
+    @Autowired
+    private Produto_VendidoService produto_VendidoService;
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Configuração das colunas
+        // Configuração das colunas tabela vendas
         vendasIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         vendasValorFinalCol.setCellValueFactory(new PropertyValueFactory<>("valor_final"));
         vendasFormaPagCol.setCellValueFactory(new PropertyValueFactory<>("forma_pagamento"));
         vendasDataCol.setCellValueFactory(new PropertyValueFactory<>("data"));
         vendasTotalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
 
+        // Configuração das colunas tabela produtos vendidos
+        prodVendidosDescCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getProduto().getDescricao())
+        );
+       // prodVendidosDescCol.setCellValueFactory(new PropertyValueFactory<>("produto.descricao"));
+        prodVendidosPrecoCol.setCellValueFactory(new PropertyValueFactory<>("preco_vendido"));
+        prodVendidosQuantCol.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
 
         tView_Vendas.widthProperty().addListener((obs, oldWidth, newWidth) -> {
             double totalWidth = newWidth.doubleValue();
@@ -71,6 +89,16 @@ public class VendasController implements Initializable {
 
         // Associa os dados à TableView
         tView_Vendas.setItems(vendasObservable);
+        tView_Vendas.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> {
+                    if (newSelection != null) {
+                        // Quando uma venda é selecionada, atualiza a tabela de produtos vendidos
+                        atualizarTabelaProdutosVendidos(newSelection.getId());
+                    }
+                }
+        );
+
+
     }
     private void atualizarTabelaVenda() {
         // Busca novamente os dados do banco
@@ -78,6 +106,21 @@ public class VendasController implements Initializable {
 
         // Atualiza os dados na TableView
         tView_Vendas.setItems(FXCollections.observableArrayList(vendaAtualizadas));
+    }
+    private void atualizarTabelaProdutosVendidos(Integer id){
+        List<Produto_Vendido> produtosVendidos = produto_VendidoService.findProdutosVendidosByVendaId(id);
+
+        System.out.println("Produtos vendidos encontrados: " + produtosVendidos.size());
+
+        ObservableList<Produto_Vendido> produtosObservable = FXCollections.observableArrayList(produtosVendidos);
+
+        tView_ProdVendidos.getItems().clear();
+        tView_ProdVendidos.setItems(produtosObservable);
+        tView_ProdVendidos.refresh();
+
+        // Teste para garantir que os dados estão realmente na tabela
+        System.out.println("Itens na TableView: " + tView_ProdVendidos.getItems().size());
+
     }
 
     public void onVenderButtonClick(ActionEvent actionEvent) {

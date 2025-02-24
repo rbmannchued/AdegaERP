@@ -80,6 +80,9 @@ public class PdvController implements Initializable {
 
     float total = 0.0f;
     float trocoValor = 0.0f;
+    float valorFinal = 0.0f;
+    float taxa = 0.0f;
+    float desconto = 0.0f;
 
     public PdvController(ProdutoService produtoService, VendaService vendaService, Produto_VendidoService produtoVendidoService) {
         this.produtoService = produtoService;
@@ -116,6 +119,17 @@ public class PdvController implements Initializable {
         tf_Pesquisa.textProperty().addListener((observable, oldValue, newValue) -> {
             buscarProduto();
         });
+        //se o combo box mudar
+        cb_FormaPag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+           if("Credito".equals(newValue) || "Debito".equals(newValue)) {
+               tf_Taxa.setVisible(true);
+           }else{
+                tf_Taxa.setVisible(false);
+                tf_Taxa.setText("0.00");
+           }
+
+        });
+
 
         prodSelecIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         prodSelecDescCol.setCellValueFactory(cellData ->
@@ -142,6 +156,15 @@ public class PdvController implements Initializable {
         });
         tf_ValorRecebido.textProperty().addListener((observable, oldValue, newValue) -> {
             atualizarTroco();
+        });
+
+        tf_Taxa.setText("0.00");
+        tf_Desconto.setText("0.00");
+        tf_Taxa.textProperty().addListener((observable, oldValue, newValue) -> {
+           atualizarTotal();
+        });
+        tf_Desconto.textProperty().addListener((observable, oldValue, newValue) -> {
+            atualizarTotal();
         });
 
         atualizarTotal();
@@ -192,6 +215,7 @@ public class PdvController implements Initializable {
         if (produtoSelecionado != null) {
             // Criar uma nova instância do Produto_Vendido
             Produto_Vendido produtoVendido = new Produto_Vendido();
+            produtoVendido.setId(produtoSelecionado.getId());
             produtoVendido.setPreco_vendido(produtoSelecionado.getPreco());
             produtoVendido.setQuantidade(1.0f);
             produtoVendido.setProduto(produtoSelecionado);
@@ -200,6 +224,15 @@ public class PdvController implements Initializable {
             produtosSelecionados.add(produtoVendido);
             atualizarTotal();
         }
+    }
+    private float getValorFinal() {
+
+        taxa = Float.parseFloat(tf_Taxa.getText());
+        desconto = Float.parseFloat(tf_Desconto.getText());
+
+        valorFinal = (total - desconto) * (1 + (taxa / 100));
+        return valorFinal;
+
     }
     private void atualizarTotal() {
 
@@ -210,13 +243,13 @@ public class PdvController implements Initializable {
         }
 
         // Atualiza a Label com o novo total formatado
-        lb_Total.setText(String.format("%.2f", total));
+        lb_Total.setText(String.format("%.2f", getValorFinal()));
         atualizarTroco();
     }
     private void atualizarTroco(){
         try{
             float valorRecebido = Float.parseFloat(tf_ValorRecebido.getText().replace(",", "."));
-            trocoValor = valorRecebido - total;
+            trocoValor = valorRecebido - getValorFinal();
             lb_Troco.setText(String.format("%.2f", trocoValor));
 
         }catch (NumberFormatException e){
@@ -234,7 +267,7 @@ public class PdvController implements Initializable {
            venda.setForma_pagamento(cb_FormaPag.getValue());
            venda.setEsta_pago(true);
            venda.setTotal(total);
-           //venda.setValor_final(total); //total - desconto ?
+           venda.setValor_final(getValorFinal()); //total - desconto ?
            vendaService.salvar(venda);
 
            for (Produto_Vendido produtoVendido : produtosSelecionados) {
